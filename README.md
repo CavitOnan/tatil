@@ -1,0 +1,83 @@
+# Tatil Asistanı
+
+Türkiye'deki resmi tatilleri ~1 yıl önceden gösteren, köprü günü (uzun hafta
+sonu) fırsatlarını hesaplayan ve tatil planlamaya yardımcı olan freemium iOS
+uygulaması.
+
+## Ana özellik
+
+Kullanıcının bulunduğu ülkenin (ilk sürümde: Türkiye) resmi tatillerini
+görüntüler, bu tatiller etrafında birkaç izin günüyle uzun tatil yapmayı
+sağlayan "köprü günü" fırsatlarını otomatik hesaplar ve kullanıcının bu
+tatilleri bütçesine göre planlamasına yardımcı olur.
+
+## Teknoloji
+
+- **React Native (Expo, TypeScript)** — tek kod tabanı, hızlı geliştirme
+- **React Navigation** — ekranlar arası gezinme (bottom tabs)
+- **Supabase** — kullanıcı hesabı/kimlik doğrulama (Auth), ileride veri
+  senkronizasyonu
+- **Nager.Date API** ([date.nager.at](https://date.nager.at)) — ücretsiz
+  resmi tatil verisi kaynağı
+- **RevenueCat + StoreKit 2** — aylık/yıllık abonelik yönetimi (henüz
+  entegre edilmedi, bkz. Faz 1 TODO)
+
+## Proje yapısı
+
+```
+src/
+  screens/         # HomeScreen, BridgeDaysScreen, CostCalculatorScreen,
+                    # PaywallScreen, ProfileScreen
+  navigation/       # RootNavigator (bottom tabs)
+  lib/
+    holidays.ts      # Nager.Date API istemcisi
+    bridgeDays.ts     # Köprü günü hesaplama algoritması (saf fonksiyon,
+                       # dış veriye ihtiyaç duymaz)
+    supabase.ts        # Supabase client + auth storage
+    entitlements.tsx    # Abonelik durumu context'i (RevenueCat gelene kadar
+                          # test amaçlı yerel state)
+  types/            # Paylaşılan TypeScript tipleri
+```
+
+## Free / Premium ayrımı
+
+**Ücretsiz:**
+- Türkiye'nin resmi tatilleri (önümüzdeki 3 ay)
+- Takvim görünümü, bir sonraki tatile geri sayım
+
+**Premium (Aylık/Yıllık):**
+- Tam 1 yıllık tatil takvimi
+- Köprü günü optimizasyonu (`findBridgeOpportunities` — kaç gün izinle kaç
+  gün tatil yapılacağını hesaplar, verimliliğe göre sıralar)
+- Maliyet hesaplayıcı (Faz 1: kullanıcı girdili — kişi sayısı × gün × günlük
+  bütçe; gerçek zamanlı fiyat API'si için bütçe ayrılmadığından Faz 2'ye
+  ertelendi)
+
+## Yol haritası
+
+- **Faz 1 (mevcut iskelet):** Auth (e-posta magic link + Sign in with Apple
+  TODO) + tek ülke tatil takvimi + köprü günü hesaplayıcı + kullanıcı girdili
+  maliyet hesaplayıcı + free/premium duvarı (test amaçlı yerel toggle)
+- **Faz 2:** Gerçek StoreKit 2 / RevenueCat entegrasyonu, çoklu ülke takibi
+- **Faz 3:** Gerçek zamanlı seyahat fiyatı entegrasyonu (bütçe ayrılırsa),
+  anlık fırsat bildirimleri (push)
+
+## Geliştirme
+
+```bash
+npm install
+npx expo start
+```
+
+`.env.example` dosyasını `.env` olarak kopyalayıp Supabase proje bilgilerini
+girin (Supabase projesi henüz oluşturulmadı — Faz 1 TODO).
+
+## Bilinen sınırlamalar / Faz 1 TODO
+
+- Sign in with Apple henüz eklenmedi (App Store'da e-posta/sosyal girişi
+  sunan uygulamalar için zorunlu).
+- Paywall ekranındaki satın alma butonları şu an sadece yerel test state'ini
+  değiştiriyor; gerçek StoreKit 2 / RevenueCat entegrasyonu yapılmadı.
+- Supabase projesi henüz oluşturulmadı, `.env` boş çalışır ama auth
+  isteği başarısız olur.
+- Nager.Date bölgesel/dini tatilleri her zaman eksiksiz kapsamayabilir.
