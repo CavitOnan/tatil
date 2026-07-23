@@ -78,6 +78,4 @@ girin (Supabase projesi henüz oluşturulmadı — Faz 1 TODO).
   sunan uygulamalar için zorunlu).
 - Paywall ekranındaki satın alma butonları şu an sadece yerel test state'ini
   değiştiriyor; gerçek StoreKit 2 / RevenueCat entegrasyonu yapılmadı.
-- Supabase projesi henüz oluşturulmadı, `.env` boş çalışır ama auth
-  isteği başarısız olur.
 - Nager.Date bölgesel/dini tatilleri her zaman eksiksiz kapsamayabilir.
