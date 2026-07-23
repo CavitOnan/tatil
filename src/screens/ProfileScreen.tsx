@@ -72,9 +72,6 @@ export default function ProfileScreen() {
           {sending ? "Gönderiliyor..." : "Giriş Bağlantısı Gönder"}
         </Text>
       </TouchableOpacity>
-      <Text style={styles.note}>
-        Not: Faz 1'de Sign in with Apple da eklenecek (App Store zorunluluğu).
-      </Text>
     </View>
   );
 }
@@ -100,5 +97,4 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: { color: "#fff", fontWeight: "700" },
-  note: { marginTop: 16, color: "#9ca3af", fontSize: 13 },
 });

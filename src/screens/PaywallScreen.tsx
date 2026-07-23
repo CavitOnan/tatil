@@ -6,10 +6,9 @@ interface Props {
 }
 
 /**
- * Faz 1'de gerçek StoreKit/RevenueCat satın alma akışı yok; butonlar
- * entitlement'ı test amaçlı yerelde değiştirir. RevenueCat entegre
- * edildiğinde bu iki handler gerçek `purchasePackage` çağrılarıyla
- * değiştirilecek.
+ * Faz 1'de gerçek ödeme akışı yok; butonlar entitlement'ı test amaçlı
+ * yerelde değiştirir. Stripe entegre edildiğinde bu iki handler gerçek
+ * checkout çağrılarıyla değiştirilecek.
  */
 export default function PaywallScreen({ feature }: Props) {
   const { setTierForTesting } = useSubscription();
@@ -18,7 +17,7 @@ export default function PaywallScreen({ feature }: Props) {
     setTierForTesting(tier);
     Alert.alert(
       "Test modu",
-      `${tier === "monthly" ? "Aylık" : "Yıllık"} plan (test) etkinleştirildi. Gerçek satın alma RevenueCat entegrasyonuyla eklenecek.`
+      `${tier === "monthly" ? "Aylık" : "Yıllık"} plan (test) etkinleştirildi. Gerçek satın alma Stripe entegrasyonuyla eklenecek.`
     );
   };
 

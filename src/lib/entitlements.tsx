@@ -3,9 +3,9 @@ import type { SubscriptionTier } from "../types";
 
 /**
  * Placeholder entitlement provider. Faz 1'de gerçek abonelik durumu yok;
- * RevenueCat entegrasyonu geldiğinde bu context'in içi StoreKit/RevenueCat
- * SDK'sından gelen entitlement bilgisiyle doldurulacak, dışa açılan
- * `useSubscription()` arayüzü aynı kalacak.
+ * Stripe entegrasyonu geldiğinde bu context'in içi Stripe'tan gelen
+ * abonelik durumuyla doldurulacak, dışa açılan `useSubscription()`
+ * arayüzü aynı kalacak.
  */
 interface SubscriptionContextValue {
   tier: SubscriptionTier;

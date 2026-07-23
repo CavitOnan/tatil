@@ -1,7 +1,7 @@
 # Tatil Asistanı
 
 Türkiye'deki resmi tatilleri ~1 yıl önceden gösteren, köprü günü (uzun hafta
-sonu) fırsatlarını hesaplayan ve tatil planlamaya yardımcı olan freemium iOS
+sonu) fırsatlarını hesaplayan ve tatil planlamaya yardımcı olan freemium web
 uygulaması.
 
 ## Ana özellik
@@ -13,14 +13,15 @@ tatilleri bütçesine göre planlamasına yardımcı olur.
 
 ## Teknoloji
 
-- **React Native (Expo, TypeScript)** — tek kod tabanı, hızlı geliştirme
+- **React Native (Expo, TypeScript) + react-native-web** — tek kod tabanı,
+  hedef platform web (`expo start --web` / `expo export --platform web`)
 - **React Navigation** — ekranlar arası gezinme (bottom tabs)
-- **Supabase** — kullanıcı hesabı/kimlik doğrulama (Auth), ileride veri
-  senkronizasyonu
+- **Supabase** — kullanıcı hesabı/kimlik doğrulama (Auth, e-posta magic
+  link), ileride veri senkronizasyonu
 - **Nager.Date API** ([date.nager.at](https://date.nager.at)) — ücretsiz
   resmi tatil verisi kaynağı
-- **RevenueCat + StoreKit 2** — aylık/yıllık abonelik yönetimi (henüz
-  entegre edilmedi, bkz. Faz 1 TODO)
+- **Ödeme/abonelik** — henüz entegre edilmedi (bkz. Faz 1 TODO); web
+  aboneliği için Stripe planlanıyor
 
 ## Proje yapısı
 
@@ -34,8 +35,8 @@ src/
     bridgeDays.ts     # Köprü günü hesaplama algoritması (saf fonksiyon,
                        # dış veriye ihtiyaç duymaz)
     supabase.ts        # Supabase client + auth storage
-    entitlements.tsx    # Abonelik durumu context'i (RevenueCat gelene kadar
-                          # test amaçlı yerel state)
+    entitlements.tsx    # Abonelik durumu context'i (ödeme entegrasyonu
+                          # gelene kadar test amaçlı yerel state)
   types/            # Paylaşılan TypeScript tipleri
 ```
 
@@ -55,29 +56,27 @@ src/
 
 ## Yol haritası
 
-- **Faz 1 (mevcut iskelet):** Auth (e-posta magic link + Sign in with Apple
-  TODO) + tek ülke tatil takvimi + köprü günü hesaplayıcı + kullanıcı girdili
-  maliyet hesaplayıcı + free/premium duvarı (test amaçlı yerel toggle)
-- **Faz 2:** Gerçek StoreKit 2 / RevenueCat entegrasyonu, çoklu ülke takibi
+- **Faz 1 (mevcut iskelet):** Auth (e-posta magic link) + tek ülke tatil
+  takvimi + köprü günü hesaplayıcı + kullanıcı girdili maliyet hesaplayıcı +
+  free/premium duvarı (test amaçlı yerel toggle)
+- **Faz 2:** Gerçek ödeme entegrasyonu (Stripe Checkout), çoklu ülke takibi
 - **Faz 3:** Gerçek zamanlı seyahat fiyatı entegrasyonu (bütçe ayrılırsa),
-  anlık fırsat bildirimleri (push)
+  e-posta/push bildirimleri
 
 ## Geliştirme
 
 ```bash
 npm install
-npx expo start
+npx expo start --web
 ```
 
 `.env.example` dosyasını `.env` olarak kopyalayıp Supabase proje bilgilerini
-girin (Supabase projesi henüz oluşturulmadı — Faz 1 TODO).
+girin.
 
 ## Bilinen sınırlamalar / Faz 1 TODO
 
-- Sign in with Apple henüz eklenmedi (App Store'da e-posta/sosyal girişi
-  sunan uygulamalar için zorunlu).
 - Paywall ekranındaki satın alma butonları şu an sadece yerel test state'ini
-  değiştiriyor; gerçek StoreKit 2 / RevenueCat entegrasyonu yapılmadı.
+  değiştiriyor; gerçek ödeme entegrasyonu (Stripe) yapılmadı.
 - Ramazan/Kurban Bayramı gibi ay takvimine bağlı tatillerin tarihi resmi
   olarak kesinleşene kadar Nager.Date'te "tentative" işaretli gelir; bu
   durum UI'da "Tarih kesinleşmedi" rozeti ve köprü günü kartlarında uyarı
