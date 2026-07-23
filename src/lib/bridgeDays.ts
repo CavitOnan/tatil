@@ -19,10 +19,12 @@ export function buildOffBlocks(
   holidays: PublicHoliday[]
 ): OffBlock[] {
   const holidayByDate = new Map<string, string[]>();
+  const tentativeDates = new Set<string>();
   for (const h of holidays) {
     const list = holidayByDate.get(h.date) ?? [];
     list.push(h.localName);
     holidayByDate.set(h.date, list);
+    if (h.isTentative) tentativeDates.add(h.date);
   }
 
   const blocks: OffBlock[] = [];
@@ -31,6 +33,7 @@ export function buildOffBlocks(
   for (let d = new Date(start); d <= end; d = addDays(d, 1)) {
     const iso = toISO(d);
     const holidayNames = holidayByDate.get(iso);
+    const isTentative = tentativeDates.has(iso);
     const isOff = isWeekend(d) || !!holidayNames;
 
     if (isOff) {
@@ -41,6 +44,7 @@ export function buildOffBlocks(
           days: [iso],
           containsHoliday: !!holidayNames,
           holidayNames: holidayNames ? [...holidayNames] : [],
+          containsTentativeHoliday: isTentative,
         };
       } else {
         current.end = iso;
@@ -49,6 +53,7 @@ export function buildOffBlocks(
           current.containsHoliday = true;
           current.holidayNames.push(...holidayNames);
         }
+        if (isTentative) current.containsTentativeHoliday = true;
       }
     } else if (current) {
       blocks.push(current);
@@ -97,6 +102,8 @@ export function findBridgeOpportunities(
       resultDays,
       efficiency: resultDays.length / gapDays.length,
       relatedHolidays: [...current.holidayNames, ...next.holidayNames],
+      relatedHolidaysTentative:
+        current.containsTentativeHoliday || next.containsTentativeHoliday,
     });
   }
 

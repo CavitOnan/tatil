@@ -78,6 +78,12 @@ export default function BridgeDaysScreen() {
               {item.relatedHolidays.join(", ")}
             </Text>
           )}
+          {item.relatedHolidaysTentative && (
+            <Text style={styles.tentativeNote}>
+              ⚠ Bu tatilin tarihi resmi olarak kesinleşmedi (dini bayram, ay
+              gözlemine bağlı), izin talebini kesinleşene kadar ertele.
+            </Text>
+          )}
         </View>
       )}
     />
@@ -100,4 +106,5 @@ const styles = StyleSheet.create({
   subtitle: { color: "#166534", marginTop: 4 },
   leaveDates: { marginTop: 8, color: "#166534" },
   holidays: { marginTop: 4, color: "#4d7c0f", fontStyle: "italic" },
+  tentativeNote: { marginTop: 8, color: "#b45309", fontSize: 12 },
 });

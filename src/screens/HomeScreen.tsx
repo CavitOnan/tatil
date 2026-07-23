@@ -70,12 +70,17 @@ export default function HomeScreen() {
 
       <FlatList
         data={visibleHolidays}
-        keyExtractor={(item) => item.date}
+        keyExtractor={(item) => `${item.date}-${item.localName}`}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
           <View style={styles.row}>
             <Text style={styles.rowDate}>{item.date}</Text>
-            <Text style={styles.rowName}>{item.localName}</Text>
+            <View style={styles.rowNameGroup}>
+              <Text style={styles.rowName}>{item.localName}</Text>
+              {item.isTentative && (
+                <Text style={styles.tentativeBadge}>Tarih kesinleşmedi</Text>
+              )}
+            </View>
           </View>
         )}
         ListFooterComponent={
@@ -119,7 +124,9 @@ const styles = StyleSheet.create({
     borderBottomColor: "#e5e7eb",
   },
   rowDate: { color: "#6b7280" },
+  rowNameGroup: { alignItems: "flex-end" },
   rowName: { fontWeight: "600" },
+  tentativeBadge: { color: "#b45309", fontSize: 11, marginTop: 2 },
   upsell: {
     marginTop: 16,
     padding: 12,

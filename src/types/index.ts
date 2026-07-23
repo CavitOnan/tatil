@@ -3,6 +3,9 @@ export interface PublicHoliday {
   localName: string;
   name: string;
   countryCode: string;
+  /** Lunar-calendar holiday (e.g. Ramazan/Kurban Bayramı) whose exact date
+   * isn't officially confirmed yet and may still shift by a day. */
+  isTentative: boolean;
 }
 
 export interface OffBlock {
@@ -11,6 +14,7 @@ export interface OffBlock {
   days: string[]; // YYYY-MM-DD, inclusive
   containsHoliday: boolean;
   holidayNames: string[];
+  containsTentativeHoliday: boolean;
 }
 
 export interface BridgeOpportunity {
@@ -23,6 +27,8 @@ export interface BridgeOpportunity {
   /** resultDays.length / leaveDates.length — higher is a better deal */
   efficiency: number;
   relatedHolidays: string[];
+  /** True if any related holiday's date isn't officially confirmed yet. */
+  relatedHolidaysTentative: boolean;
 }
 
 export type SubscriptionTier = "free" | "monthly" | "yearly";

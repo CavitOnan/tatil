@@ -78,4 +78,7 @@ girin (Supabase projesi henüz oluşturulmadı — Faz 1 TODO).
   sunan uygulamalar için zorunlu).
 - Paywall ekranındaki satın alma butonları şu an sadece yerel test state'ini
   değiştiriyor; gerçek StoreKit 2 / RevenueCat entegrasyonu yapılmadı.
-- Nager.Date bölgesel/dini tatilleri her zaman eksiksiz kapsamayabilir.
+- Ramazan/Kurban Bayramı gibi ay takvimine bağlı tatillerin tarihi resmi
+  olarak kesinleşene kadar Nager.Date'te "tentative" işaretli gelir; bu
+  durum UI'da "Tarih kesinleşmedi" rozeti ve köprü günü kartlarında uyarı
+  olarak gösteriliyor (bkz. `holidays.ts` → `isTentative`).
