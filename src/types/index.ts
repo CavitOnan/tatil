@@ -32,3 +32,8 @@ export interface BridgeOpportunity {
 }
 
 export type SubscriptionTier = "free" | "monthly" | "yearly";
+
+export interface Profile {
+  id: string;
+  trial_ends_at: string;
+}

@@ -16,8 +16,9 @@ tatilleri bütçesine göre planlamasına yardımcı olur.
 - **React Native (Expo, TypeScript) + react-native-web** — tek kod tabanı,
   hedef platform web (`expo start --web` / `expo export --platform web`)
 - **React Navigation** — ekranlar arası gezinme (bottom tabs)
-- **Supabase** — kullanıcı hesabı/kimlik doğrulama (Auth, e-posta magic
-  link), ileride veri senkronizasyonu
+- **Supabase** — kullanıcı hesabı/kimlik doğrulama (Auth: e-posta+şifre ve
+  e-posta magic link), her kullanıcı için 14 günlük deneme süresi tutan
+  `profiles` tablosu (bkz. `supabase/migrations/`), ileride veri senkronizasyonu
 - **Nager.Date API** ([date.nager.at](https://date.nager.at)) — ücretsiz
   resmi tatil verisi kaynağı
 - **Ödeme/abonelik** — henüz entegre edilmedi, Faz 1 kapsamı dışında; web
@@ -35,9 +36,12 @@ src/
     bridgeDays.ts     # Köprü günü hesaplama algoritması (saf fonksiyon,
                        # dış veriye ihtiyaç duymaz)
     supabase.ts        # Supabase client + auth storage
-    entitlements.tsx    # Abonelik durumu context'i (ödeme entegrasyonu
-                          # gelene kadar test amaçlı yerel state)
+    entitlements.tsx    # Abonelik durumu context'i: yerel test tier'ı VEYA
+                          # profiles.trial_ends_at'ten gelen 14 günlük deneme
   types/            # Paylaşılan TypeScript tipleri
+supabase/
+  migrations/       # profiles tablosu + sign-up trigger'ı (SQL Editor'da
+                     # elle çalıştırılır, henüz CLI ile bağlı değil)
 ```
 
 ## Free / Premium ayrımı
@@ -46,7 +50,12 @@ src/
 - Türkiye'nin resmi tatilleri (önümüzdeki 3 ay)
 - Takvim görünümü, bir sonraki tatile geri sayım
 
-**Premium (Aylık/Yıllık):**
+Her yeni kayıtlı kullanıcı (şifreyle kayıt ya da magic link ile ilk giriş),
+kayıt anından itibaren 14 gün boyunca otomatik olarak Premium erişime sahip
+olur (`profiles.trial_ends_at`, DB trigger ile atanır — client tarafından
+atlanamaz veya sıfırlanamaz).
+
+**Premium (deneme süresi / Aylık / Yıllık):**
 - Tam 1 yıllık tatil takvimi
 - Köprü günü optimizasyonu (`findBridgeOpportunities` — kaç gün izinle kaç
   gün tatil yapılacağını hesaplar, verimliliğe göre sıralar)
@@ -71,7 +80,9 @@ npx expo start --web
 ```
 
 `.env.example` dosyasını `.env` olarak kopyalayıp Supabase proje bilgilerini
-girin.
+girin. Ardından Supabase Dashboard → SQL Editor'da
+`supabase/migrations/0001_profiles_trial.sql` içeriğini çalıştırın (henüz
+Supabase CLI ile bağlı değil, elle uygulanması gerekiyor).
 
 ## Bilinen sınırlamalar / Faz 1 TODO
 
