@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -7,14 +7,21 @@ import {
   View,
 } from "react-native";
 import { fetchHolidaysForNextYear } from "../lib/holidays";
-import { useSubscription } from "../lib/entitlements";
 import type { PublicHoliday } from "../types";
 
 const COUNTRY_CODE = "TR";
-const FREE_TIER_MONTHS_AHEAD = 3;
+
+function formatDateWithWeekday(isoDate: string): string {
+  return new Date(`${isoDate}T00:00:00Z`).toLocaleDateString("tr-TR", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+    weekday: "long",
+    timeZone: "UTC",
+  });
+}
 
 export default function HomeScreen() {
-  const { isPremium } = useSubscription();
   const [holidays, setHolidays] = useState<PublicHoliday[] | null>(null);
   const [error, setError] = useState<string | null>(null);
 
@@ -24,17 +31,7 @@ export default function HomeScreen() {
       .catch((e) => setError(e.message));
   }, []);
 
-  const visibleHolidays = useMemo(() => {
-    if (!holidays) return [];
-    if (isPremium) return holidays;
-
-    const cutoff = new Date();
-    cutoff.setMonth(cutoff.getMonth() + FREE_TIER_MONTHS_AHEAD);
-    const cutoffStr = cutoff.toISOString().slice(0, 10);
-    return holidays.filter((h) => h.date <= cutoffStr);
-  }, [holidays, isPremium]);
-
-  const nextHoliday = visibleHolidays[0];
+  const nextHoliday = holidays?.[0];
   const daysUntilNext = nextHoliday
     ? Math.ceil(
         (new Date(nextHoliday.date).getTime() - Date.now()) /
@@ -69,12 +66,14 @@ export default function HomeScreen() {
       )}
 
       <FlatList
-        data={visibleHolidays}
+        data={holidays}
         keyExtractor={(item) => `${item.date}-${item.localName}`}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
           <View style={styles.row}>
-            <Text style={styles.rowDate}>{item.date}</Text>
+            <Text style={styles.rowDate}>
+              {formatDateWithWeekday(item.date)}
+            </Text>
             <View style={styles.rowNameGroup}>
               <Text style={styles.rowName}>{item.localName}</Text>
               {item.isTentative && (
@@ -83,15 +82,6 @@ export default function HomeScreen() {
             </View>
           </View>
         )}
-        ListFooterComponent={
-          !isPremium ? (
-            <Text style={styles.upsell}>
-              Ücretsiz sürümde önümüzdeki {FREE_TIER_MONTHS_AHEAD} ay
-              gösterilir. Tam 1 yıllık takvim ve köprü günü önerileri için
-              Premium'a geç.
-            </Text>
-          ) : null
-        }
       />
     </View>
   );
@@ -127,12 +117,4 @@ const styles = StyleSheet.create({
   rowNameGroup: { alignItems: "flex-end" },
   rowName: { fontWeight: "600" },
   tentativeBadge: { color: "#b45309", fontSize: 11, marginTop: 2 },
-  upsell: {
-    marginTop: 16,
-    padding: 12,
-    borderRadius: 10,
-    backgroundColor: "#fef3c7",
-    color: "#92400e",
-    textAlign: "center",
-  },
 });

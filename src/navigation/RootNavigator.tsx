@@ -3,7 +3,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
 import BridgeDaysScreen from "../screens/BridgeDaysScreen";
 import CostCalculatorScreen from "../screens/CostCalculatorScreen";
-import ProfileScreen from "../screens/ProfileScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -25,11 +24,6 @@ export default function RootNavigator() {
           name="Maliyet"
           component={CostCalculatorScreen}
           options={{ title: "Maliyet Hesapla" }}
-        />
-        <Tab.Screen
-          name="Profil"
-          component={ProfileScreen}
-          options={{ title: "Profil" }}
         />
       </Tab.Navigator>
     </NavigationContainer>

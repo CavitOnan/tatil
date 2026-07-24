@@ -8,21 +8,17 @@ import {
 } from "react-native";
 import { findBridgeOpportunities } from "../lib/bridgeDays";
 import { fetchHolidaysForNextYear } from "../lib/holidays";
-import { useSubscription } from "../lib/entitlements";
 import type { BridgeOpportunity } from "../types";
-import PaywallScreen from "./PaywallScreen";
 
 const COUNTRY_CODE = "TR";
 
 export default function BridgeDaysScreen() {
-  const { isPremium } = useSubscription();
   const [opportunities, setOpportunities] = useState<
     BridgeOpportunity[] | null
   >(null);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!isPremium) return;
     const from = new Date();
     const to = new Date();
     to.setFullYear(to.getFullYear() + 1);
@@ -32,13 +28,7 @@ export default function BridgeDaysScreen() {
         setOpportunities(findBridgeOpportunities(from, to, holidays))
       )
       .catch((e) => setError(e.message));
-  }, [isPremium]);
-
-  if (!isPremium) {
-    return (
-      <PaywallScreen feature="Köprü günü fırsatları, sadece bir kaç izin günüyle uzun tatiller yapmanı sağlar." />
-    );
-  }
+  }, []);
 
   if (error) {
     return (

@@ -30,10 +30,3 @@ export interface BridgeOpportunity {
   /** True if any related holiday's date isn't officially confirmed yet. */
   relatedHolidaysTentative: boolean;
 }
-
-export type SubscriptionTier = "free" | "monthly" | "yearly";
-
-export interface Profile {
-  id: string;
-  trial_ends_at: string;
-}

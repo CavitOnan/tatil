@@ -1,7 +1,5 @@
 import { useMemo, useState } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import { useSubscription } from "../lib/entitlements";
-import PaywallScreen from "./PaywallScreen";
 
 /**
  * Faz 1 maliyet hesaplayıcı: dış API'ye bağlı değil, kullanıcının girdiği
@@ -9,7 +7,6 @@ import PaywallScreen from "./PaywallScreen";
  * çıkarır. Faz 2'de gerçek fiyat kaynaklarıyla zenginleştirilebilir.
  */
 export default function CostCalculatorScreen() {
-  const { isPremium } = useSubscription();
   const [people, setPeople] = useState("2");
   const [days, setDays] = useState("4");
   const [dailyBudgetPerPerson, setDailyBudgetPerPerson] = useState("1500");
@@ -20,12 +17,6 @@ export default function CostCalculatorScreen() {
     const b = Number(dailyBudgetPerPerson) || 0;
     return p * d * b;
   }, [people, days, dailyBudgetPerPerson]);
-
-  if (!isPremium) {
-    return (
-      <PaywallScreen feature="Tatil maliyet hesaplayıcı, planını bütçene göre şekillendirmeni sağlar." />
-    );
-  }
 
   return (
     <View style={styles.container}>
