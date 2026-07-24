@@ -20,8 +20,8 @@ tatilleri bütçesine göre planlamasına yardımcı olur.
   link), ileride veri senkronizasyonu
 - **Nager.Date API** ([date.nager.at](https://date.nager.at)) — ücretsiz
   resmi tatil verisi kaynağı
-- **Ödeme/abonelik** — henüz entegre edilmedi (bkz. Faz 1 TODO); web
-  aboneliği için Stripe planlanıyor
+- **Ödeme/abonelik** — henüz entegre edilmedi, Faz 1 kapsamı dışında; web
+  aboneliği için Faz 2'de iyzico planlanıyor
 
 ## Proje yapısı
 
@@ -59,7 +59,7 @@ src/
 - **Faz 1 (mevcut iskelet):** Auth (e-posta magic link) + tek ülke tatil
   takvimi + köprü günü hesaplayıcı + kullanıcı girdili maliyet hesaplayıcı +
   free/premium duvarı (test amaçlı yerel toggle)
-- **Faz 2:** Gerçek ödeme entegrasyonu (Stripe Checkout), çoklu ülke takibi
+- **Faz 2:** Gerçek ödeme entegrasyonu (iyzico), çoklu ülke takibi
 - **Faz 3:** Gerçek zamanlı seyahat fiyatı entegrasyonu (bütçe ayrılırsa),
   e-posta/push bildirimleri
 
@@ -76,7 +76,8 @@ girin.
 ## Bilinen sınırlamalar / Faz 1 TODO
 
 - Paywall ekranındaki satın alma butonları şu an sadece yerel test state'ini
-  değiştiriyor; gerçek ödeme entegrasyonu (Stripe) yapılmadı.
+  değiştiriyor; gerçek ödeme entegrasyonu (iyzico) Faz 1 kapsamı dışında
+  bırakıldı, Faz 2'de ele alınacak.
 - Ramazan/Kurban Bayramı gibi ay takvimine bağlı tatillerin tarihi resmi
   olarak kesinleşene kadar Nager.Date'te "tentative" işaretli gelir; bu
   durum UI'da "Tarih kesinleşmedi" rozeti ve köprü günü kartlarında uyarı

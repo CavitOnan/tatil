@@ -6,9 +6,9 @@ interface Props {
 }
 
 /**
- * Faz 1'de gerçek ödeme akışı yok; butonlar entitlement'ı test amaçlı
- * yerelde değiştirir. Stripe entegre edildiğinde bu iki handler gerçek
- * checkout çağrılarıyla değiştirilecek.
+ * Faz 1'de gerçek ödeme akışı yok (bilinçli olarak kapsam dışı); butonlar
+ * entitlement'ı test amaçlı yerelde değiştirir. Faz 2'de iyzico entegre
+ * edildiğinde bu iki handler gerçek checkout çağrılarıyla değiştirilecek.
  */
 export default function PaywallScreen({ feature }: Props) {
   const { setTierForTesting } = useSubscription();
@@ -17,7 +17,7 @@ export default function PaywallScreen({ feature }: Props) {
     setTierForTesting(tier);
     Alert.alert(
       "Test modu",
-      `${tier === "monthly" ? "Aylık" : "Yıllık"} plan (test) etkinleştirildi. Gerçek satın alma Stripe entegrasyonuyla eklenecek.`
+      `${tier === "monthly" ? "Aylık" : "Yıllık"} plan (test) etkinleştirildi. Gerçek satın alma iyzico entegrasyonuyla eklenecek.`
     );
   };
 

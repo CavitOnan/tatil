@@ -2,10 +2,10 @@ import { createContext, useContext, useState, type ReactNode } from "react";
 import type { SubscriptionTier } from "../types";
 
 /**
- * Placeholder entitlement provider. Faz 1'de gerçek abonelik durumu yok;
- * Stripe entegrasyonu geldiğinde bu context'in içi Stripe'tan gelen
- * abonelik durumuyla doldurulacak, dışa açılan `useSubscription()`
- * arayüzü aynı kalacak.
+ * Placeholder entitlement provider. Faz 1'de gerçek abonelik durumu yok
+ * (bilinçli olarak kapsam dışı); Faz 2'de iyzico entegrasyonu geldiğinde
+ * bu context'in içi iyzico'dan gelen abonelik durumuyla doldurulacak,
+ * dışa açılan `useSubscription()` arayüzü aynı kalacak.
  */
 interface SubscriptionContextValue {
   tier: SubscriptionTier;
